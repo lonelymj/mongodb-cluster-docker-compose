@@ -13,6 +13,8 @@ services:
       - ./scripts:/scripts
       - /root/fast-gpt/mongo/router01/data:/data/db
       - /root/fast-gpt/mongo/router01/config:/data/configdb
+    networks:
+      - yanxi_net
   router02:
     image: mongo:6.0.1
     container_name: router-02
@@ -26,6 +28,8 @@ services:
     restart: always
     links:
       - router01
+    networks:
+      - yanxi_net
 
 ## Config Servers
   configsvr01:
@@ -43,6 +47,8 @@ services:
       - shard01-a
       - shard02-a
       - shard03-a
+    networks:
+      - yanxi_net
   configsvr02:
     image: mongo:6.0.1
     container_name: mongo-config-02 
@@ -56,6 +62,8 @@ services:
     restart: always
     links:
       - configsvr01
+    networks:
+      - yanxi_net
   configsvr03:
     image: mongo:6.0.1
     container_name: mongo-config-03 
@@ -69,6 +77,8 @@ services:
     restart: always
     links:
       - configsvr02
+    networks:
+      - yanxi_net
 
 ## Shards
   ## Shards 01
@@ -87,6 +97,8 @@ services:
     links:
       - shard01-b
       - shard01-c
+    networks:
+      - yanxi_net
   shard01-b:
     image: mongo:6.0.1
     container_name: shard-01-node-b
@@ -98,6 +110,8 @@ services:
     ports:
       - 27123:27017
     restart: always
+    networks:
+      - yanxi_net
   shard01-c:
     image: mongo:6.0.1
     container_name: shard-01-node-c
@@ -109,6 +123,8 @@ services:
     ports:
       - 27124:27017
     restart: always
+    networks:
+      - yanxi_net
 
   ## Shards 02
   shard02-a:
@@ -125,6 +141,8 @@ services:
     links:
       - shard02-b
       - shard02-c
+    networks:
+      - yanxi_net
   shard02-b:
     image: mongo:6.0.1
     container_name: shard-02-node-b
@@ -136,6 +154,8 @@ services:
     ports:
       - 27126:27017
     restart: always
+    networks:
+      - yanxi_net
   shard02-c:
     image: mongo:6.0.1
     container_name: shard-02-node-c
@@ -147,6 +167,8 @@ services:
     ports:
       - 27127:27017
     restart: always
+    networks:
+      - yanxi_net
 
   ## Shards 03
   shard03-a:
@@ -163,6 +185,8 @@ services:
     links:
       - shard03-b
       - shard03-c
+    networks:
+      - yanxi_net
   shard03-b:
     image: mongo:6.0.1
     container_name: shard-03-node-b
@@ -174,6 +198,8 @@ services:
     ports:
       - 27129:27017
     restart: always
+    networks:
+      - yanxi_net
   shard03-c:
     image: mongo:6.0.1
     container_name: shard-03-node-c
@@ -185,3 +211,10 @@ services:
     ports:
       - 27130:27017
     restart: always
+    networks:
+      - yanxi_net
+
+networks:
+  yanxi_net:
+    name: yanxi_net
+    external: true
